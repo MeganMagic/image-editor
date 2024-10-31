@@ -19,6 +19,7 @@ const Editor = () => {
       width: 100,
       height: 50,
       color: "#ff0000",
+      rotate: 0,
     };
     addShape(shapeDraft);
   };
