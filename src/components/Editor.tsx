@@ -5,6 +5,7 @@ import ImageLayer from "./ImageLayer/ImageLayer";
 import { useShapeStore } from "./ShapeLayer/ShapeStore";
 import ShapeLayer from "./ShapeLayer/ShapeLayer";
 import { ShapeDraft } from "./ShapeLayer/types";
+import DrawingLayer from "./DrawingLayer/DrawingLayer";
 
 const Editor = () => {
   const imageInputRef = useRef<HTMLInputElement | null>(null);
@@ -51,14 +52,15 @@ const Editor = () => {
 
         <button>drawing</button>
       </div>
-      <Stage
+      {/* <Stage
         width={600}
         height={600}
         className="w-fit border border-gray-300 bg-gray-100"
       >
         <ImageLayer />
         <ShapeLayer />
-      </Stage>
+      </Stage> */}
+      <DrawingLayer />
     </>
   );
 };
