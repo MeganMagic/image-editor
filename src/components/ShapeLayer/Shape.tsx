@@ -7,13 +7,14 @@ import { useShapeStore } from "./ShapeStore";
 const MINIMAL_SIZE = 5;
 
 const Shape = ({ id, type, x, y, width, height, color }: IShape) => {
-  const shapeRef = useRef<Konva.Rect | null>(null);
+  const shapeRef = useRef<(Konva.Rect & Konva.Ellipse) | null>(null);
   const transformerRef = useRef<Konva.Transformer | null>(null);
 
   const { updateShape, activateShape, activeShapeId } = useShapeStore();
   const isActive = useMemo(() => id === activeShapeId, [id, activeShapeId]);
 
   const handleOnClick = () => {
+    console.log("shape clicked", id);
     activateShape(id);
   };
 
@@ -70,12 +71,26 @@ const Shape = ({ id, type, x, y, width, height, color }: IShape) => {
             onDragEnd={handleDragEnd}
             onTransformEnd={handleTransformEnd}
           />
-          <Transformer ref={transformerRef} flipEnabled={false} />
+          {isActive && <Transformer ref={transformerRef} flipEnabled={false} />}
         </React.Fragment>
       );
     case "ELLIPSE":
       return (
-        <Ellipse x={x} y={y} radiusX={width} radiusY={height} fill={color} />
+        <React.Fragment>
+          <Ellipse
+            ref={shapeRef}
+            x={x}
+            y={y}
+            radiusX={width / 2}
+            radiusY={height / 2}
+            fill={isActive ? "#0000ff" : color}
+            draggable={isActive}
+            onClick={handleOnClick}
+            onDragEnd={handleDragEnd}
+            onTransformEnd={handleTransformEnd}
+          />
+          {isActive && <Transformer ref={transformerRef} flipEnabled={false} />}
+        </React.Fragment>
       );
   }
 };

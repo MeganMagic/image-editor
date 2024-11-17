@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { create } from "zustand";
 
 interface ImageState {
@@ -20,14 +20,12 @@ export const useImageStore = create<ImageState>()((set) => ({
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
-export const useImageUploader = (onError?: (message: string) => void) => {
+// exposed features to host app
+export const useImageController = (onError?: (message: string) => void) => {
   const { updateImage } = useImageStore();
 
   const uploadImage = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-
+    (file: File) => {
       // 파일 용량 초과
       if (file.size > MAX_FILE_SIZE) {
         const message = "File is too large. Maximum size is 5MB.";

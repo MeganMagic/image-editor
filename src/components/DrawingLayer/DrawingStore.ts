@@ -50,3 +50,28 @@ export const useDrawingStore = create<DrawingState>()((set) => ({
   endDrawing: () => set(() => ({ isDrawing: false })),
   changeTool: (tool) => set((state) => ({ tool: { ...state.tool, ...tool } })),
 }));
+
+export const useDrawingController = () => {
+  const { tool, changeTool } = useDrawingStore();
+
+  const changeColor = (newColor: string) => {
+    changeTool({ color: newColor });
+  };
+
+  const changeWidth = (newWidth: number) => {
+    changeTool({ width: newWidth });
+  };
+
+  const toggleToolType = () => {
+    changeTool({ type: tool.type === "pen" ? "eraser" : "pen" });
+  };
+
+  return {
+    color: tool.color,
+    width: tool.width,
+    toolType: tool.type,
+    changeColor,
+    changeWidth,
+    toggleToolType,
+  };
+};

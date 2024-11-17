@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const { ModuleFederationPlugin } = require("webpack").container;
 
 const path = require("path");
 const webpack = require("webpack");
@@ -13,7 +14,7 @@ module.exports = (webpackEnv) => {
     : isEnvDevelopment && "development";
 
   const pathConfig = {
-    entry: "./src/index.tsx",
+    entry: "./src/index",
     output: {
       path: path.join(__dirname, "/dist"),
       filename: "[name].js",
@@ -68,6 +69,17 @@ module.exports = (webpackEnv) => {
       patterns: [{ from: "public" }],
     }),
     new CleanWebpackPlugin(),
+    new ModuleFederationPlugin({
+      name: "editor",
+      filename: "remoteEntry.js",
+      exposes: {
+        ".": "./src/components/Editor",
+        "./controllers": "./src/exposedControllers",
+      },
+      shared: {
+        react: { singleton: true, eager: true },
+      },
+    }),
   ];
 
   return {
